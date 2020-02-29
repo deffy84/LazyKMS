@@ -154,5 +154,12 @@ namespace LazyKMS
             RunAction(4);
             this.Hide();
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            SetOfficeVersion();
+            RunAction(5);
+            this.Hide();
+        }
     }
 }

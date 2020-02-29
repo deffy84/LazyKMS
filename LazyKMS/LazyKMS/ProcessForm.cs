@@ -26,6 +26,7 @@ namespace LazyKMS
         
         private int _officekey;
         private int _officeserver;
+        private int _officefull;
 
         public ProcessForm()
         {
@@ -75,6 +76,10 @@ namespace LazyKMS
 
                 case 4:
                     SetServerOffice(true);
+                    break;
+
+                case 5:
+                    FullOffice();
                     break;
 
                 default:
@@ -338,6 +343,44 @@ namespace LazyKMS
             }).Start();
         }
 
+        private void FullOffice()
+        {
+            new Thread(() =>
+            {
+                Thread.CurrentThread.IsBackground = true;
 
+                // multithreading lvl 100
+                SetKeyOffice(false);
+                while (_officekey == 0) { Thread.Sleep(1); }
+
+                SetServerOffice(false);
+                while (_officeserver == 0) { Thread.Sleep(1); }
+
+                SetInfoText("Getting Office install directory...");
+                string officepath = Lazy.GetOfficeDir(SettingsHelper.settings.officever);
+
+                SetInfoText("Activating...");
+                Lazy.ActivateOffice(officepath, _handler);
+                if (_procoutput.Contains("Product activation successful"))
+                {
+                    _officefull = 2;
+                }
+                else
+                {
+                    _officefull = 1;
+                }
+                _procoutput = "";
+
+                if (_officefull == 2)
+                {
+                    MessageBox.Show("Activation successful!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Failed to activate Office. Please see console output for more information.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                Finish();
+            }).Start();
+        }
     }
 }

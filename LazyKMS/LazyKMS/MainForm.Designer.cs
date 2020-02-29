@@ -439,7 +439,7 @@
             this.button6.TabIndex = 2;
             this.button6.Text = "Full";
             this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button8_Click);
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // button7
             // 
