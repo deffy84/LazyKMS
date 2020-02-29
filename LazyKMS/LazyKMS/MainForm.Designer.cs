@@ -119,6 +119,7 @@
             this.linkLabel1.TabIndex = 12;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Website";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // label3
             // 
@@ -138,6 +139,7 @@
             this.linkLabel2.TabIndex = 14;
             this.linkLabel2.TabStop = true;
             this.linkLabel2.Text = "GitHub";
+            this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
             // 
             // label4
             // 
@@ -157,6 +159,7 @@
             this.linkLabel3.TabIndex = 16;
             this.linkLabel3.TabStop = true;
             this.linkLabel3.Text = "How to";
+            this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel3_LinkClicked);
             // 
             // tabControl1
             // 

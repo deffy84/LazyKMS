@@ -12,5 +12,8 @@ This tool is fully open-source and does not rely on any other software. It basic
 ## Download
 You can download latest compiled version in [GitHub release section](https://github.com/SamuelTulach/LazyKMS/releases).
 
+## How to use
+Please read my [blog post about this program](https://tulach.cc/wordpress/2020/02/29/activating-windows-with-no-additional-software-for-free/) (and basically how it works).
+
 ## Support and contribution
 If you find any bug or error that you think should not be happening please [create an issue](https://github.com/SamuelTulach/LazyKMS/issues). If you have anything you would like to add, you can create a [pull request](https://github.com/SamuelTulach/LazyKMS/pulls).

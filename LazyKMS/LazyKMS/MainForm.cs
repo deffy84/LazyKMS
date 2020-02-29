@@ -161,5 +161,20 @@ namespace LazyKMS
             RunAction(5);
             this.Hide();
         }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://tulach.cc/");
+        }
+
+        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://github.com/SamuelTulach/LazyKMS");
+        }
+
+        private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://tulach.cc/wordpress/2020/02/29/activating-windows-with-no-additional-software-for-free/");
+        }
     }
 }
