@@ -145,7 +145,7 @@ namespace LazyKMS
         }
 
         /// <summary>
-        /// Set Office server
+        /// Set Office server (ospp.vbs /sethst)
         /// </summary>
         /// <param name="officedir">Office script directory</param>
         /// <param name="server">Server to set</param>
@@ -153,6 +153,28 @@ namespace LazyKMS
         public static void SetServerOffice(string officedir, string server, DataReceivedEventHandler output)
         {
             RunProcess("cscript", $"\"{officedir}ospp.vbs\" /sethst:{server}", output);
+        }
+
+        /// <summary>
+        /// Set Office port (ospp.vbs /setprt)
+        /// </summary>
+        /// <param name="officedir"></param>
+        /// <param name="port"></param>
+        /// <param name="output"></param>
+        public static void SetPortOffice(string officedir, string port, DataReceivedEventHandler output)
+        {
+            RunProcess("cscript", $"\"{officedir}ospp.vbs\" /setprt:{port}", output);
+        }
+
+        /// <summary>
+        /// Generates volume licenses for Office
+        /// using a loop and ospp command
+        /// </summary>
+        /// <param name="officedir">Office script directory</param>
+        /// <param name="output">EventHandler to receive command output</param>
+        public static void GenerateLicenses16(string officedir, DataReceivedEventHandler output)
+        {
+            RunProcess("cmd", $"/c cd \"{officedir}\" && for /f %x in ('dir /b ..\\root\\Licenses16\\ProPlus2019VL*.xrm-ms') do cscript ospp.vbs /inslic:\"..\\root\\Licenses16\\%x\"", output);
         }
     }
 }

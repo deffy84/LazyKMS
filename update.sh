@@ -8,6 +8,7 @@ git add *.csproj
 git add *.vcxproj
 git add *.config
 git add *.hpp
+git add *.png
 
 git commit -m "$(date)"
 

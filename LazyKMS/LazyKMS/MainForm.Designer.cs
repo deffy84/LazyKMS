@@ -474,10 +474,7 @@
             // 
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Items.AddRange(new object[] {
-            "Office Professional Plus 2019",
-            "Office Standard 2019",
-            "Office Professional Plus 2016",
-            "Office Standard 2016"});
+            "Office Professional Plus 2019"});
             this.comboBox2.Location = new System.Drawing.Point(93, 17);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(186, 21);

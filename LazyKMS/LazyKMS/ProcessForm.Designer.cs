@@ -89,6 +89,7 @@
             this.Name = "ProcessForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LazyKMS";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ProcessForm_FormClosed);
             this.Load += new System.EventHandler(this.ProcessForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

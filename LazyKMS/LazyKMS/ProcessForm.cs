@@ -33,6 +33,11 @@ namespace LazyKMS
             InitializeComponent();
         }
 
+        private void ProcessForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            FormProvider.mainForm.Show();
+        }
+
         private void SetInfoText(string text)
         {
             label1.Invoke((MethodInvoker)delegate {
@@ -44,16 +49,22 @@ namespace LazyKMS
         {
             richTextBox1.Invoke((MethodInvoker)delegate {
                 richTextBox1.Text += outLine.Data + "\n";
+                richTextBox1.SelectionStart = richTextBox1.Text.Length;
+                richTextBox1.ScrollToCaret();
             });
             _procoutput += outLine.Data + "\n";
         }
 
         private void ProcessForm_Load(object sender, EventArgs e)
         {
+            // Just in case someone manages to use same instance twice
             _keyset = 0;
             _serverset = 0;
             _fullset = 0;
             _officekey = 0;
+            _officeserver = 0;
+            _officefull = 0;
+
             _handler = new DataReceivedEventHandler(OutputHandler);
 
             switch (Action)
@@ -277,6 +288,10 @@ namespace LazyKMS
 
                 SetInfoText("Getting key...");
                 string key = Lazy.GetOfficeKey(SettingsHelper.settings.officever);
+                if (SettingsHelper.settings.forcekey)
+                {
+                    key = SettingsHelper.settings.key;
+                }
 
                 SetInfoText("Setting key...");
                 Lazy.SetKeyOffice(officepath, key, _handler);
@@ -358,6 +373,12 @@ namespace LazyKMS
 
                 SetInfoText("Getting Office install directory...");
                 string officepath = Lazy.GetOfficeDir(SettingsHelper.settings.officever);
+
+                SetInfoText("Setting port...");
+                Lazy.SetPortOffice(officepath, "1688", _handler);
+
+                SetInfoText("Generating volume licenses... (this will take a while)");
+                Lazy.GenerateLicenses16(officepath, _handler);
 
                 SetInfoText("Activating...");
                 Lazy.ActivateOffice(officepath, _handler);
