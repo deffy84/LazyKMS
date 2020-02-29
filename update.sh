@@ -11,4 +11,4 @@ git add *.hpp
 
 git commit -m "$(date)"
 
-#git push
+git push

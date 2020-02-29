@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -22,6 +23,9 @@ namespace LazyKMS
         private int _keyset;
         private int _serverset;
         private int _fullset;
+        
+        private int _officekey;
+        private int _officeserver;
 
         public ProcessForm()
         {
@@ -48,20 +52,29 @@ namespace LazyKMS
             _keyset = 0;
             _serverset = 0;
             _fullset = 0;
+            _officekey = 0;
             _handler = new DataReceivedEventHandler(OutputHandler);
 
             switch (Action)
             {
                 case 0:
-                    OnlyKey();
+                    SetKey(true);
                     break;
 
                 case 1:
-                    OnlyServer();
+                    SetServer(true);
                     break;
 
                 case 2:
                     Full();
+                    break;
+
+                case 3:
+                    SetKeyOffice(true);
+                    break;
+
+                case 4:
+                    SetServerOffice(true);
                     break;
 
                 default:
@@ -174,16 +187,6 @@ namespace LazyKMS
             }).Start();
         }
 
-        private void OnlyKey()
-        {
-            SetKey(true);
-        }
-
-        private void OnlyServer()
-        {
-            SetServer(true);
-        }
-
         private void Full()
         {
             new Thread(() =>
@@ -219,5 +222,122 @@ namespace LazyKMS
                 Finish();
             }).Start();
         }
+
+        /*private void OfficeDetect()
+        {
+            new Thread(() =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+
+                SetInfoText("Waiting for Word process...");
+                Process[] word = Process.GetProcessesByName("WINWORD");
+                while (word.Length == 0)
+                {
+                    word = Process.GetProcessesByName("WINWORD");
+                    Thread.Sleep(1000);
+                }
+                string exepath = word[0].MainModule.FileName;
+                // C:\Program Files(x86)\Microsoft Office\root\Office16
+                // -> C:\Program Files (x86)\Microsoft Office
+                string activpath = Directory.GetParent(Directory.GetParent(Path.GetDirectoryName(exepath)).FullName).FullName; // oof
+                string officefol = new DirectoryInfo(Path.GetDirectoryName(exepath)).Name;
+                // C:\Program Files (x86)\Microsoft Office
+                // -> C:\Program Files (x86)\Microsoft Office\Office16
+                activpath += "\\" + officefol + "\\";
+
+                SetInfoText("Getting Office version...");
+                Lazy.ActivateOffice(activpath, _handler);
+                if (_procoutput.Contains("Key Management Service machine name set to"))
+                {
+                    _serverset = 2;
+                }
+                else
+                {
+                    _serverset = 1;
+                }
+                _procoutput = "";
+
+                Finish();
+            }).Start();
+        }*/
+
+        private void SetKeyOffice(bool showend)
+        {
+            new Thread(() =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+
+                SetInfoText("Getting Office install directory...");
+                string officepath = Lazy.GetOfficeDir(SettingsHelper.settings.officever);
+
+                SetInfoText("Getting key...");
+                string key = Lazy.GetOfficeKey(SettingsHelper.settings.officever);
+
+                SetInfoText("Setting key...");
+                Lazy.SetKeyOffice(officepath, key, _handler);
+                if (_procoutput.Contains("Product key installation successful"))
+                {
+                    _officekey = 2;
+                }
+                else
+                {
+                    _officekey = 1;
+                }
+                _procoutput = "";
+
+                if (showend)
+                {
+                    if (_officekey == 2)
+                    {
+                        MessageBox.Show("Key set successfully!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to set key. Please see console output for more information.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    Finish();
+                }
+
+            }).Start();
+        }
+
+        private void SetServerOffice(bool showend)
+        {
+            new Thread(() =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+
+                SetInfoText("Getting Office install directory...");
+                string officepath = Lazy.GetOfficeDir(SettingsHelper.settings.officever);
+
+                SetInfoText("Setting server...");
+                Lazy.SetServerOffice(officepath, SettingsHelper.settings.kmsserver, _handler);
+
+                if (_procoutput.Contains("Successfully applied setting"))
+                {
+                    _officeserver = 2;
+                }
+                else
+                {
+                    _officeserver = 1;
+                }
+                _procoutput = "";
+
+                if (showend)
+                {
+                    if (_officeserver == 2)
+                    {
+                        MessageBox.Show("Server set successfully!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to set server. Please see console output for more information.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    Finish();
+                }
+            }).Start();
+        }
+
+
     }
 }

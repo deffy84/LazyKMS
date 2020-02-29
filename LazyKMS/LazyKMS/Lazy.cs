@@ -103,6 +103,56 @@ namespace LazyKMS
             return KeyList.GetWindowsKey(fullname);
         }
 
+        /// <summary>
+        /// Gets Office volume licensing key
+        /// </summary>
+        /// <param name="fullname">Name (see KeyList.cs)</param>
+        /// <returns></returns>
+        public static string GetOfficeKey(string fullname)
+        {
+            return KeyList.GetOfficeKey(fullname);
+        }
 
+        /// <summary>
+        /// Run Office activation with current settings (ospp.vbs /act)
+        /// </summary>
+        /// <param name="officedir"></param>
+        /// <param name="output"></param>
+        public static void ActivateOffice(string officedir, DataReceivedEventHandler output)
+        {
+            RunProcess("cscript", $"\"{officedir}ospp.vbs\" /act", output);
+        }
+
+        /// <summary>
+        /// Set Windows key (slmgr.vbs /ipk)
+        /// </summary>
+        /// <param name="key">Key to set</param>
+        /// <param name="output">EventHandler to receive slmgr output</param>
+        public static void SetKeyOffice(string officedir, string key, DataReceivedEventHandler output)
+        {
+            RunProcess("cscript", $"\"{officedir}ospp.vbs\" /inpkey:{key}", output);
+        }
+
+        /// <summary>
+        /// Get Office script directory
+        /// (see KeyList.cs)
+        /// </summary>
+        /// <param name="name">Text</param>
+        /// <returns></returns>
+        public static string GetOfficeDir(string name)
+        {
+            return KeyList.GetOfficeScriptDir(name);
+        }
+
+        /// <summary>
+        /// Set Office server
+        /// </summary>
+        /// <param name="officedir">Office script directory</param>
+        /// <param name="server">Server to set</param>
+        /// <param name="output">EventHandler to receive ospp output</param>
+        public static void SetServerOffice(string officedir, string server, DataReceivedEventHandler output)
+        {
+            RunProcess("cscript", $"\"{officedir}ospp.vbs\" /sethst:{server}", output);
+        }
     }
 }

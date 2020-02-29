@@ -33,6 +33,9 @@ namespace LazyKMS
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            // Because winforms bad
+            comboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
+            
             // Load settings
             SetSettings();
 
@@ -124,26 +127,32 @@ namespace LazyKMS
             }
         }*/
 
+        private void SetOfficeVersion()
+        {
+            SettingsHelper.settings.officever = comboBox2.Text;
+        }
+
         private void button8_Click(object sender, EventArgs e)
         {
-            button8.Enabled = false;
-            MessageBox.Show("Please read carefully!\n\nTo detect Office version correctly, you need to click on OK button and then open Word. The program will try to locate it and detect it's variant/version.\n\nMake sure the version got detected correctly before trying to activate it.", "Detection Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            SetOfficeVersion();
+            MessageBox.Show("Please read carefully!\n\nIt is really hard to detect where all of Office versions are installed since M$ is moving them like shit and registry keys can be completely same for different versions, so this program uses default install paths for activation.\n\nMake sure you have installed office in default installation directory!", "Version Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            button8.Text = "Waiting for Word...";
+            RunAction(3);
+            this.Hide();
+        }
 
-            new Thread(() =>
-            {
-                Process[] word = Process.GetProcessesByName("WINWORD");
-                while (word.Length == 0)
-                {
-                    word = Process.GetProcessesByName("WINWORD");
-                    Thread.Sleep(1000);
-                }
+        private void button8_Click_1(object sender, EventArgs e)
+        {
+            SetOfficeVersion();
+            RunAction(3);
+            this.Hide();
+        }
 
-                button8.Invoke((MethodInvoker)delegate {
-                    button8.Text = "Detecting...";
-                });
-            }).Start();
+        private void button7_Click(object sender, EventArgs e)
+        {
+            SetOfficeVersion();
+            RunAction(4);
+            this.Hide();
         }
     }
 }

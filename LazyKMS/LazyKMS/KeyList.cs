@@ -62,5 +62,58 @@ namespace LazyKMS
                 return "unknown";
             }
         }
+
+        /// <summary>
+        /// Get Office volume key
+        /// </summary>
+        /// <param name="fullname">Text</param>
+        /// <returns></returns>
+        public static string GetOfficeKey(string fullname)
+        {
+            Dictionary<string, string> list = new Dictionary<string, string>();
+
+            // http://wind4.github.io/vlmcsd/
+            list.Add("Office Professional Plus 2019", "NMMKJ-6RK4F-KMJVX-8D9MJ-6MWKP");
+            list.Add("Office Standard 2019", "6NWWJ-YQWMR-QKGCB-6TMB3-9D9HK");
+            
+            list.Add("Office Professional Plus 2016", "XQNVK-8JYDB-WJ9W3-YJ8YR-WFG99");
+            list.Add("Office Standard 2016", "JNRGM-WHDWX-FJJG3-K47QV-DRTFM");
+
+            if (list.ContainsKey(fullname))
+            {
+                return list[fullname];
+            }
+            else
+            {
+                return "unknown";
+            }
+        }
+
+        /// <summary>
+        /// Get Office script directory
+        /// (C:\Program Files (x86)\Microsoft Office\Office16)
+        /// </summary>
+        /// <param name="fullname">Text</param>
+        /// <returns></returns>
+        public static string GetOfficeScriptDir(string fullname)
+        {
+            Dictionary<string, string> list = new Dictionary<string, string>();
+
+            // Make sure it ends with \
+            list.Add("Office Professional Plus 2019", @"C:\Program Files (x86)\Microsoft Office\Office16\");
+            list.Add("Office Standard 2019", @"C:\Program Files (x86)\Microsoft Office\Office16\");
+
+            list.Add("Office Professional Plus 2016", @"C:\Program Files (x86)\Microsoft Office\Office16\");
+            list.Add("Office Standard 2016", @"C:\Program Files (x86)\Microsoft Office\Office16\");
+
+            if (list.ContainsKey(fullname))
+            {
+                return list[fullname];
+            }
+            else
+            {
+                return "unknown";
+            }
+        }
     }
 }

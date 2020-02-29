@@ -12,5 +12,7 @@ namespace LazyKMS
         
         public bool forcekey;
         public string key;
+
+        public string officever;
     }
 }
